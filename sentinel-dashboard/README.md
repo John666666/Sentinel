@@ -46,6 +46,21 @@ java -Dserver.port=8080 \
 - `-Dsentinel.dashboard.auth.password=123456` 用于指定控制台的登录密码为 `123456`；如果省略这两个参数，默认用户和密码均为 `sentinel`；
 - `-Dserver.servlet.session.timeout=7200` 用于指定 Spring Boot 服务端 session 的过期时间，如 `7200` 表示 7200 秒；`60m` 表示 60 分钟，默认为 30 分钟；
 
+### 持久化参数
+目前仅流控规则经过持久化改造，接入Nacos进行持久化存储。Sentinel客户端应用重启后，流控规则依然有效，不会丢失。
+对应菜单：【流控规则 Nacos】，只有经过该菜单添加的流控规则才会持久化存储。
+
+持久化相关参数：
+
+| 参数 | 默认值 | 作用 |
+| -------- | -------- |-------- |
+|`sentinel.nacos.server-addr` | localhost:8848 | 指定nacos服务地址 |
+|`sentinel.nacos.namespace` |  | 指定Nacos中用于存储规则配置文件的namespace，注意是Id |
+|`sentinel.nacos.group-id`| SENTINEL_GROUP | 指定Nacos中用于存储规则配置文件的GroupId |
+|`sentinel.nacos.flow-data-id-postfix`| -flow-rule | 指定在Nacos中用于存储流控规则配置文件对应的DataId的后缀（`appName`+`flow-data-id-postfix`），注意：要跟Sentinel客户端保持一致 |
+
+
+
 ## 2. 客户端接入
 
 选择合适的方式接入 Sentinel，然后在应用启动时加入 JVM 参数 `-Dcsp.sentinel.dashboard.server=consoleIp:port` 指定控制台地址和端口。
